@@ -288,6 +288,7 @@ app.get('/auth/instagram/callback', auth, async (req, res) => {
   }
 });
 
+require('./site-settings').routes(app, { auth, db });
 require('./oauth-routes')(app, { auth, db, jwt, JWT_SECRET });
 
 // ---------- admin ----------
