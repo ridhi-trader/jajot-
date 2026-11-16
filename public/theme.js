@@ -4,18 +4,18 @@
   'use strict';
 
   var THEMES = {
-    candy:    { name: 'Candy',    icon: '🍬', emoji: ['🌸', '✨', '💌', '📣', '⭐', '🦋', '☁️', '💖'] },
-    ocean:    { name: 'Ocean',    icon: '🌊', emoji: ['🐚', '🐠', '🐳', '🌊', '💧', '⭐', '🫧', '🪸'] },
-    forest:   { name: 'Forest',   icon: '🌿', emoji: ['🌿', '🍃', '🦋', '🐞', '🌼', '🍄', '🐝', '🌳'] },
-    sunset:   { name: 'Sunset',   icon: '🌅', emoji: ['🌅', '🔥', '🧡', '🌴', '🦩', '☀️', '🍊', '✨'] },
-    sweet:    { name: 'Sweet',    icon: '🧁', emoji: ['🧁', '🍓', '🍩', '🍭', '🎀', '🍰', '🍒', '🧸'] },
-    night:    { name: 'Night',    icon: '🌙', emoji: ['🌙', '⭐', '✨', '🪐', '🦉', '💫', '🌌', '☁️'] },
-    rose:     { name: 'Rose',     icon: '🌹', emoji: ['🌹', '💕', '💗', '🌷', '💌', '🎀', '🦢', '✨'] },
-    mint:     { name: 'Mint',     icon: '🍀', emoji: ['🍀', '🌱', '🍃', '🥝', '🧊', '🐸', '💚', '🫧'] },
-    lavender: { name: 'Dreamy',   icon: '🔮', emoji: ['🔮', '🦄', '💜', '🌌', '🫐', '🪻', '✨', '🦋'] },
-    gold:     { name: 'Diwali',   icon: '🪔', emoji: ['🪔', '🎆', '✨', '🎇', '🧨', '🪙', '🌟', '🎁'] },
-    neon:     { name: 'Neon',     icon: '⚡', emoji: ['🎮', '⚡', '💎', '🌐', '🛸', '🔮', '💫', '🎧'] },
-    coffee:   { name: 'Coffee',   icon: '☕', emoji: ['☕', '🍪', '🥐', '🍂', '📚', '🧸', '🕯️', '🍫'] },
+    candy:    { name: 'Candy',    icon: '🍬', c: ['#8b5cf6', '#ec4899', '#fdf2f8'], emoji: ['🌸', '✨', '💌', '📣', '⭐', '🦋', '☁️', '💖'] },
+    ocean:    { name: 'Ocean',    icon: '🌊', c: ['#0ea5e9', '#14b8a6', '#e0f7ff'], emoji: ['🐚', '🐠', '🐳', '🌊', '💧', '⭐', '🫧', '🪸'] },
+    forest:   { name: 'Forest',   icon: '🌿', c: ['#16a34a', '#ca8a04', '#ecfce5'], emoji: ['🌿', '🍃', '🦋', '🐞', '🌼', '🍄', '🐝', '🌳'] },
+    sunset:   { name: 'Sunset',   icon: '🌅', c: ['#f97316', '#e11d48', '#fff1e6'], emoji: ['🌅', '🔥', '🧡', '🌴', '🦩', '☀️', '🍊', '✨'] },
+    sweet:    { name: 'Sweet',    icon: '🧁', c: ['#ec4899', '#f59e0b', '#fff7d6'], emoji: ['🧁', '🍓', '🍩', '🍭', '🎀', '🍰', '🍒', '🧸'] },
+    night:    { name: 'Night',    icon: '🌙', c: ['#a78bfa', '#38bdf8', '#1a1228'], emoji: ['🌙', '⭐', '✨', '🪐', '🦉', '💫', '🌌', '☁️'] },
+    rose:     { name: 'Rose',     icon: '🌹', c: ['#f43f5e', '#a855f7', '#fff0f3'], emoji: ['🌹', '💕', '💗', '🌷', '💌', '🎀', '🦢', '✨'] },
+    mint:     { name: 'Mint',     icon: '🍀', c: ['#10b981', '#06b6d4', '#e8fff6'], emoji: ['🍀', '🌱', '🍃', '🥝', '🧊', '🐸', '💚', '🫧'] },
+    lavender: { name: 'Dreamy',   icon: '🔮', c: ['#6366f1', '#a855f7', '#f5f0ff'], emoji: ['🔮', '🦄', '💜', '🌌', '🫐', '🪻', '✨', '🦋'] },
+    gold:     { name: 'Diwali',   icon: '🪔', c: ['#d97706', '#dc2626', '#fffbea'], emoji: ['🪔', '🎆', '✨', '🎇', '🧨', '🪙', '🌟', '🎁'] },
+    neon:     { name: 'Neon',     icon: '⚡', c: ['#22d3ee', '#e879f9', '#0b0f1e'], emoji: ['🎮', '⚡', '💎', '🌐', '🛸', '🔮', '💫', '🎧'] },
+    coffee:   { name: 'Coffee',   icon: '☕', c: ['#92400e', '#b45309', '#f7efe6'], emoji: ['☕', '🍪', '🥐', '🍂', '📚', '🧸', '🕯️', '🍫'] },
   };
   var ORDER = Object.keys(THEMES);
 
@@ -235,95 +235,197 @@
     if (cb) cb.checked = animOn(site);
   }
 
-  // ---------- admin panel ----------
-  function opts(list, cur) {
-    return list.map(function (o) {
-      return '<option value="' + o[0] + '"' + (o[0] === cur ? ' selected' : '') + '>' + o[1] + '</option>';
-    }).join('');
+  // ---------- admin panel (tabs: Theme / Font / Emoji / Text) ----------
+  var POPULAR = '😀😍🥰😎🤩🔥✨💖🎉🎁🌸🌈⭐🌙☀️🍕🍔🍩☕🐶🐱🦋🚀💰📈💼🏆✅📣💡🎯🪔🎆🌹🍀🌊🐼🦄';
+  var EMOJI_DB = '😀 smile happy grin|😃 happy smile|😄 laugh happy|😁 grin teeth|😆 laugh haha|😅 sweat relief|🤣 rofl lol funny|😂 joy tears funny hansi|🙂 smile|😉 wink|😊 blush happy|😇 angel halo|🥰 love hearts pyaar|😍 love heart eyes pyaar|🤩 star struck wow|😘 kiss love|😋 yum tasty food|😜 crazy wink tongue|🤗 hug|🤔 think hmm|🤫 shh quiet|😎 cool sunglasses|🥳 party celebrate birthday|🤓 nerd|😏 smirk|😴 sleep|😢 cry sad|😭 sob cry rona|😡 angry mad|🤯 mind blown|😱 scream shock|🥺 please puppy eyes|🤑 money rich paisa|🤖 robot|👻 ghost|💀 skull|👽 alien|💩 poop|🙈 monkey see no evil|😺 cat happy billi|😻 cat love billi|🙌 hands celebrate|👏 clap|🙏 pray namaste thanks|👍 thumbs up like badhiya|👎 thumbs down|👌 ok perfect|✌️ victory peace|🤞 luck fingers crossed|🤟 love you|🤘 rock|👋 wave hello|💪 strong muscle|✍️ write|👀 eyes look|🧠 brain smart|❤️ heart love red pyaar dil|🧡 orange heart|💛 yellow heart|💚 green heart|💙 blue heart|💜 purple heart|🖤 black heart|🤍 white heart|🩷 pink heart|💔 broken heart|💖 sparkling heart pyaar|💗 growing heart|💓 beating heart|💞 two hearts|💕 hearts love pyaar|💘 cupid arrow heart|💝 gift heart|💌 love letter|💋 kiss lips|💯 hundred perfect|💥 boom blast|💫 dizzy star|💦 water drops|💨 dash wind|🔥 fire hot aag|✨ sparkles shine|⭐ star sitara|🌟 glowing star|🌈 rainbow indradhanush|💡 idea bulb|🎯 target goal|🏆 trophy win jeet|🥇 gold medal first|🎖️ medal|👑 crown king queen|💎 diamond gem|🎉 party popper celebrate|🎊 confetti|🎈 balloon|🎁 gift present tohfa|🎂 birthday cake janamdin|🎀 ribbon bow|🪔 diya diwali lamp deepak|🎆 fireworks diwali|🎇 sparkler diwali|🧨 firecracker patakha diwali|🪅 pinata|🎄 christmas tree|🎃 pumpkin halloween|🪁 kite patang|🕉️ om|🛕 mandir temple|🕌 mosque|⛪ church|🌸 cherry blossom flower phool|🌹 rose gulab flower phool|🌺 hibiscus flower phool|🌻 sunflower flower phool|🌼 blossom flower phool|🌷 tulip flower phool|💐 bouquet flowers phool|🪷 lotus kamal flower|🌱 seedling plant|🌿 herb leaf|🍀 clover luck|🍃 leaves wind|🍂 fallen leaf autumn|🍁 maple leaf|🌴 palm tree beach|🌳 tree|🌵 cactus|🍄 mushroom|🐚 shell|🌊 wave sea water|🌙 moon chand|🌕 full moon|☀️ sun suraj|🌤️ sun cloud|⛅ partly cloudy|☁️ cloud|🌧️ rain|⛈️ thunder storm|❄️ snowflake snow|☃️ snowman|⚡ lightning bolt power|🌪️ tornado|🌍 earth globe world|🪐 planet saturn|🌌 galaxy milky way|☄️ comet|🚀 rocket launch|🛸 ufo|🌅 sunrise sunset|🌄 sunrise mountain|🏔️ mountain|🏖️ beach|🏝️ island|🐶 dog puppy kutta|🐱 cat kitten billi|🐭 mouse|🐹 hamster|🐰 rabbit bunny|🦊 fox|🐻 bear|🐼 panda|🐨 koala|🐯 tiger sher|🦁 lion sher|🐮 cow gaay|🐷 pig|🐸 frog|🐵 monkey bandar|🐔 chicken|🐧 penguin|🐦 bird|🦆 duck|🦉 owl|🦅 eagle|🦋 butterfly titli|🐝 bee madhumakkhi|🐞 ladybug|🐛 bug caterpillar|🐌 snail|🐢 turtle|🐍 snake saanp|🦖 dinosaur trex|🐙 octopus|🐠 tropical fish|🐟 fish machhli|🐬 dolphin|🐳 whale|🦈 shark|🐘 elephant haathi|🦒 giraffe|🦓 zebra|🐴 horse ghoda|🦄 unicorn|🐪 camel|🦚 peacock mor|🦜 parrot tota|🦢 swan|🦩 flamingo|🐾 paw prints|🍎 apple seb fruit|🍊 orange santra fruit|🍋 lemon fruit|🍌 banana kela fruit|🍉 watermelon tarbooz fruit|🍇 grapes angoor fruit|🍓 strawberry fruit|🍒 cherries fruit|🍑 peach fruit|🥭 mango aam fruit|🍍 pineapple fruit|🥥 coconut|🥝 kiwi fruit|🍅 tomato|🥑 avocado|🥕 carrot|🌽 corn|🌶️ chilli mirch|🥔 potato aloo|🍞 bread|🧀 cheese|🍳 egg fry|🥞 pancakes|🍔 burger food|🍟 fries food|🍕 pizza food|🌭 hotdog|🥪 sandwich|🌮 taco|🌯 burrito|🍜 noodles ramen|🍝 pasta|🍛 curry rice|🍣 sushi|🍱 bento|🍿 popcorn|🍩 donut sweet|🍪 cookie biscuit|🍰 cake slice|🧁 cupcake|🍫 chocolate|🍬 candy toffee|🍭 lollipop|🍦 ice cream|🍯 honey shahad|☕ coffee tea chai|🍵 green tea chai|🧋 bubble tea|🥤 cold drink|🍺 beer|🍷 wine|🍹 cocktail|🥂 cheers champagne|🥛 milk doodh|🍽️ plate dinner|📱 phone mobile|💻 laptop computer|🖥️ desktop|⌨️ keyboard|📷 camera photo|🎥 video camera|📺 tv|🎧 headphones music|🎤 mic sing|🎵 music note|🎶 music notes|📢 loudspeaker announce|📣 megaphone announce|🔔 bell notification|📧 email mail|📩 envelope|📝 memo note write|📋 clipboard|📌 pin|📍 location pin|🔗 link|🔒 lock secure|🔑 key|🛒 cart shopping|🛍️ shopping bags|💰 money bag paisa|💵 dollar cash paisa|💸 money flying|💳 credit card|🪙 coin sikka|🏦 bank|📈 chart up growth profit|📉 chart down loss|📊 bar chart stats|💼 briefcase business|🧾 receipt bill|📦 package parcel|🚚 delivery truck|📅 calendar date|⏰ alarm clock time|⌛ hourglass|✅ check done|❌ cross wrong|⚠️ warning|❗ exclamation|❓ question|✔️ tick|➕ plus|🆕 new|🆓 free|🔝 top|🔴 red circle|🟢 green circle|🔵 blue circle|🟡 yellow circle|🟣 purple circle|⚪ white circle|⚫ black circle|🔶 orange diamond|🔷 blue diamond|▶️ play|⏩ fast forward|🔄 refresh|♻️ recycle|🏠 house home ghar|🏢 office building|🏪 shop store|🏫 school|🏥 hospital|🚗 car gaadi|🚕 taxi|🚌 bus|🚲 bicycle cycle|🏍️ bike motorcycle|✈️ plane flight|🚂 train|⛵ boat|🚢 ship|🧳 luggage travel|🗺️ map|🧭 compass|⚽ football soccer|🏏 cricket|🏀 basketball|🎾 tennis|🏸 badminton|🏑 hockey|🎮 game controller|🎲 dice|♟️ chess|🧩 puzzle|🎨 art palette paint|🖌️ brush|✏️ pencil|📚 books study|📖 book|🎓 graduation|🔬 science|🧪 test tube|💊 medicine|🩺 doctor stethoscope|🧘 yoga meditation|🏋️ gym weights|🛠️ tools|🔧 wrench|⚙️ gear settings|🧲 magnet|🔍 search magnifier|🔭 telescope|🕯️ candle|🪞 mirror|🛋️ sofa|🛏️ bed|🚿 shower|🧼 soap|👗 dress|👕 tshirt|👟 shoes sneakers|👜 handbag|🕶️ sunglasses|💄 lipstick|💍 ring';
+  var EMO = EMOJI_DB.split('|').map(function (s) { var i = s.indexOf(' '); return [s.slice(0, i), s.slice(i + 1).toLowerCase()]; });
+  (function () { var seen = {}; EMO = EMO.filter(function (e) { if (seen[e[0]]) return false; seen[e[0]] = 1; return true; }); })();
+  function loadEmojiData(cb) { cb(); }
+
+  function loadAllFonts() {
+    if (document.getElementById('sh-font-all')) return;
+    var fam = Object.keys(FONTS).map(function (k) { return 'family=' + FONTS[k][1]; }).join('&');
+    var l = document.createElement('link');
+    l.id = 'sh-font-all';
+    l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?' + fam + '&display=swap';
+    document.head.appendChild(l);
+  }
+
+  function loadPanelCss() {
+    if (document.getElementById('look-css')) return;
+    var l = document.createElement('link');
+    l.id = 'look-css';
+    l.rel = 'stylesheet';
+    l.href = '/look-panel.css?v=1';
+    document.head.appendChild(l);
+  }
+
+  function seg(key, list, cur) {
+    return '<div class="lp-seg">' + list.map(function (o) {
+      return '<button type="button" data-sk="' + key + '" data-sv="' + o[0] + '"' + (o[0] === cur ? ' class="on"' : '') + '>' + o[1] + '</button>';
+    }).join('') + '</div>';
   }
 
   function openLook() {
     closeLook();
+    loadPanelCss();
     draft = merge(DEF, site);
     if (!THEMES[draft.theme]) { draft.theme = root.dataset.theme; draft.lock = 1; }
 
     modal = document.createElement('div');
     modal.id = 'look-modal';
-    var th = ORDER.map(function (k) {
-      return '<button type="button" data-lt="' + k + '"><span>' + THEMES[k].icon + '</span>' + THEMES[k].name + '</button>';
+
+    var themeTiles = ORDER.map(function (k) {
+      var c = THEMES[k].c;
+      return '<button type="button" class="lp-tile" data-lt="' + k + '">' +
+        '<span class="lp-sw" style="background:linear-gradient(135deg,' + c[2] + ' 0%,' + c[0] + ' 55%,' + c[1] + ' 100%)"></span>' +
+        '<span class="lp-nm">' + THEMES[k].icon + ' ' + THEMES[k].name + '</span></button>';
     }).join('');
-    var packs = PACKS.map(function (p, i) { return '<button type="button" data-pk="' + i + '">' + p[1].slice(0, 2) + ' ' + p[0] + '</button>'; }).join('');
+
+    var fontTiles = Object.keys(FONTS).map(function (k) {
+      return '<button type="button" class="lp-font" data-lf="' + k + '" style="font-family:\'' + FONTS[k][0] + '\',sans-serif">' +
+        '<b>' + FONTS[k][0] + '</b><span>Social Hub 123 ✨</span><i>✔</i></button>';
+    }).join('');
+
+    var packBtns = PACKS.map(function (p, i) {
+      return '<button type="button" class="lp-pack" data-pk="' + i + '">' + graphemes(p[1]).slice(0, 3).join('') + ' ' + p[0] + '</button>';
+    }).join('');
+
     modal.innerHTML =
-      '<div class="lk-card">' +
-        '<div class="lk-head"><b>🎨 App ka look</b><button type="button" id="lk-x">✖</button></div>' +
-        '<div class="muted">Yahan jo badlegi wo sab ke app me khud lag jayega.</div>' +
-        '<div class="lk-sec">🎨 Theme</div><div class="lk-grid">' + th + '</div>' +
-        '<div class="lk-sec">🔤 Font</div>' +
-        '<select id="lk-font">' + opts(Object.keys(FONTS).map(function (k) { return [k, FONT_LABEL[k]]; }), draft.font) + '</select>' +
-        '<div class="lk-prev" id="lk-prev">Ye font aisa dikhega: Aa Bb Cc 123 ✨</div>' +
-        '<div class="lk-sec">✨ Live emoji wallpaper</div>' +
-        '<label class="inline"><input type="checkbox" id="lk-anim"> Emoji udte rahe</label>' +
-        '<div class="lk-row">' +
-          '<select id="lk-density">' + opts([['few', 'Kam emoji'], ['normal', 'Normal'], ['many', 'Bahut emoji']], draft.density) + '</select>' +
-          '<select id="lk-speed">' + opts([['slow', 'Dheere'], ['normal', 'Normal speed'], ['fast', 'Tez']], draft.speed) + '</select>' +
-          '<select id="lk-size">' + opts([['small', 'Chhote'], ['normal', 'Normal size'], ['big', 'Bade']], draft.size) + '</select>' +
+      '<div class="lp-card">' +
+        '<div class="lp-head"><b>🎨 App ka look</b><button type="button" id="lp-x" aria-label="Close">✖</button></div>' +
+        '<div class="lp-tabs">' +
+          '<button type="button" data-tab="theme" class="on">🎨<span>Theme</span></button>' +
+          '<button type="button" data-tab="font">🔤<span>Font</span></button>' +
+          '<button type="button" data-tab="emoji">✨<span>Emoji</span></button>' +
+          '<button type="button" data-tab="text">📝<span>Text</span></button>' +
         '</div>' +
-        '<input id="lk-emoji" placeholder="Apne emoji likh (khali = theme ke emoji)" maxlength="120">' +
-        '<div class="lk-packs">' + packs + '<button type="button" data-pk="-1">↺ Theme wale</button></div>' +
-        '<div class="lk-sec">📝 App ka text</div>' +
-        '<input id="lk-name" placeholder="App ka naam (default: Social Hub)" maxlength="40">' +
-        '<input id="lk-tag" placeholder="Login page ki line (default: One post. All your accounts.)" maxlength="80">' +
-        '<input id="lk-ann" placeholder="Upar ka banner message (khali = koi banner nahi)" maxlength="200">' +
-        '<label class="inline"><input type="checkbox" id="lk-lock"> Sab ko yehi theme dikhao (clients badal na sakein)</label>' +
-        '<div class="lk-actions"><button type="button" class="primary" id="lk-save">💾 Save</button><button type="button" id="lk-reset">Default</button></div>' +
-        '<div id="lk-msg" class="muted"></div>' +
+        '<div class="lp-body">' +
+          '<div class="lp-pane" data-pane="theme">' +
+            '<div class="lp-help">👆 Jo pasand aaye us pe daba. Upar app turant badal jayega.</div>' +
+            '<div class="lp-grid">' + themeTiles + '</div>' +
+          '</div>' +
+          '<div class="lp-pane hidden" data-pane="font">' +
+            '<div class="lp-help">👆 Jo font pasand aaye us pe daba. Har font apne style me likha hai.</div>' +
+            '<div class="lp-fonts">' + fontTiles + '</div>' +
+          '</div>' +
+          '<div class="lp-pane hidden" data-pane="emoji">' +
+            '<label class="lp-switch"><input type="checkbox" id="lp-anim"><span>✨ Emoji udte rahe (live wallpaper)</span></label>' +
+            '<div class="lp-h">1️⃣ Kaun se emoji?</div>' +
+            '<div class="lp-packs"><button type="button" class="lp-pack" data-pk="-1">🪄 Auto (theme wale)</button>' + packBtns + '</div>' +
+            '<div class="lp-h">2️⃣ Tere chune hue emoji <small>(hatane ke liye daba)</small></div>' +
+            '<div id="lp-sel" class="lp-sel"></div>' +
+            '<div class="lp-h">3️⃣ Naya emoji dhundh <small>(English me: cat, love, flower, fire...)</small></div>' +
+            '<input id="lp-q" type="search" placeholder="🔍 Emoji dhundo..." autocomplete="off">' +
+            '<div id="lp-res" class="lp-res"></div>' +
+            '<div class="lp-h">4️⃣ Kitne, kitna tez, kitne bade</div>' +
+            '<div class="lp-lbl">Kitne emoji</div>' + seg('density', [['few', 'Kam'], ['normal', 'Normal'], ['many', 'Zyada']], draft.density) +
+            '<div class="lp-lbl">Speed</div>' + seg('speed', [['slow', 'Dheere'], ['normal', 'Normal'], ['fast', 'Tez']], draft.speed) +
+            '<div class="lp-lbl">Size</div>' + seg('size', [['small', 'Chhote'], ['normal', 'Normal'], ['big', 'Bade']], draft.size) +
+          '</div>' +
+          '<div class="lp-pane hidden" data-pane="text">' +
+            '<div class="lp-help">Yahan jo likhegi wo app me khud badal jayega. Khali chhodo to purana text rahega.</div>' +
+            '<div class="lp-lbl">App ka naam</div><input id="lp-name" placeholder="Social Hub" maxlength="40">' +
+            '<div class="lp-lbl">Login page ki line</div><input id="lp-tag" placeholder="One post. All your accounts." maxlength="80">' +
+            '<div class="lp-lbl">Upar ka banner (offer ya message)</div><input id="lp-ann" placeholder="Jaise: Diwali offer 🪔" maxlength="200">' +
+          '</div>' +
+        '</div>' +
+        '<div class="lp-foot">' +
+          '<label class="lp-switch"><input type="checkbox" id="lp-lock"><span>🔒 Clients theme na badal sakein</span></label>' +
+          '<div class="lp-actions"><button type="button" class="primary" id="lp-save">💾 Save karo</button><button type="button" id="lp-reset">Default</button></div>' +
+          '<div id="lp-msg" class="muted"></div>' +
+        '</div>' +
       '</div>';
     document.body.appendChild(modal);
 
     function $(id) { return modal.querySelector('#' + id); }
-    $('lk-emoji').value = draft.emoji;
-    $('lk-name').value = draft.appName;
-    $('lk-tag').value = draft.tagline;
-    $('lk-ann').value = draft.announce;
-    $('lk-anim').checked = !!draft.anim;
-    $('lk-lock').checked = !!draft.lock;
+    $('lp-name').value = draft.appName;
+    $('lp-tag').value = draft.tagline;
+    $('lp-ann').value = draft.announce;
+    $('lp-anim').checked = !!draft.anim;
+    $('lp-lock').checked = !!draft.lock;
 
-    function sync() {
-      modal.querySelectorAll('[data-lt]').forEach(function (b) { b.classList.toggle('on', b.dataset.lt === draft.theme); });
-      var f = FONTS[draft.font] ? draft.font : 'quicksand';
-      loadFont(f);
-      $('lk-prev').style.fontFamily = "'" + FONTS[f][0] + "', sans-serif";
+    function msg(t) { $('lp-msg').textContent = t; }
+
+    function paintSel() {
+      var arr = graphemes(draft.emoji);
+      $('lp-sel').innerHTML = arr.length
+        ? arr.map(function (g, i) { return '<button type="button" class="lp-e" data-rm="' + i + '" title="Hatao">' + g + '</button>'; }).join('') +
+          '<button type="button" class="lp-clear" data-clear="1">🗑 Sab hatao</button>'
+        : '<span class="muted">Abhi auto hai: ' + THEMES[root.dataset.theme].emoji.join(' ') + '</span>';
     }
-    function live() { render(draft, true); sync(); }
 
-    modal.querySelectorAll('[data-lt]').forEach(function (b) {
-      b.onclick = function () { draft.theme = b.dataset.lt; live(); };
-    });
-    modal.querySelectorAll('[data-pk]').forEach(function (b) {
-      b.onclick = function () {
+    function paint() {
+      modal.querySelectorAll('[data-lt]').forEach(function (b) { b.classList.toggle('on', b.dataset.lt === draft.theme); });
+      modal.querySelectorAll('[data-lf]').forEach(function (b) { b.classList.toggle('on', b.dataset.lf === draft.font); });
+      modal.querySelectorAll('[data-sk]').forEach(function (b) { b.classList.toggle('on', draft[b.dataset.sk] === b.dataset.sv); });
+      paintSel();
+    }
+    function live() { render(draft, true); paint(); }
+
+    function showResults(q) {
+      var res = $('lp-res');
+      q = (q || '').toLowerCase().trim();
+      var list;
+      if (!q) {
+        list = graphemes(POPULAR);
+      } else {
+        var words = q.split(/\s+/);
+        list = EMO.filter(function (e) {
+          var k = ' ' + e[1];
+          return words.every(function (w) { return k.indexOf(' ' + w) > -1; });
+        }).slice(0, 60).map(function (e) { return e[0]; });
+      }
+      res.innerHTML = list.length
+        ? list.map(function (g) { return '<button type="button" class="lp-e" data-add="' + g + '">' + g + '</button>'; }).join('')
+        : '<span class="muted">Kuch nahi mila. English me dusra shabd try kar (jaise: heart, star, cake).</span>';
+    }
+
+    function showTab(name) {
+      modal.querySelectorAll('[data-tab]').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === name); });
+      modal.querySelectorAll('[data-pane]').forEach(function (p) { p.classList.toggle('hidden', p.dataset.pane !== name); });
+      if (name === 'font') loadAllFonts();
+      if (name === 'emoji') loadEmojiData(function () { showResults($('lp-q').value); });
+    }
+
+    modal.addEventListener('click', function (e) {
+      var b;
+      if (e.target === modal || e.target.closest('#lp-x')) { closeLook(); render(site); return; }
+      if ((b = e.target.closest('[data-tab]'))) return showTab(b.dataset.tab);
+      if ((b = e.target.closest('[data-lt]'))) { draft.theme = b.dataset.lt; return live(); }
+      if ((b = e.target.closest('[data-lf]'))) { draft.font = b.dataset.lf; return live(); }
+      if ((b = e.target.closest('[data-sk]'))) { draft[b.dataset.sk] = b.dataset.sv; return live(); }
+      if ((b = e.target.closest('[data-pk]'))) {
         var i = +b.dataset.pk;
         draft.emoji = i >= 0 ? PACKS[i][1] : '';
-        $('lk-emoji').value = draft.emoji;
-        live();
-      };
+        return live();
+      }
+      if ((b = e.target.closest('[data-add]'))) {
+        var arr = graphemes(draft.emoji);
+        if (arr.length >= 24) { msg('Max 24 emoji. Pehle kuch hatao.'); return; }
+        arr.push(b.dataset.add);
+        draft.emoji = arr.join('');
+        msg('');
+        return live();
+      }
+      if ((b = e.target.closest('[data-rm]'))) {
+        var a2 = graphemes(draft.emoji);
+        a2.splice(+b.dataset.rm, 1);
+        draft.emoji = a2.join('');
+        return live();
+      }
+      if (e.target.closest('[data-clear]')) { draft.emoji = ''; return live(); }
     });
-    $('lk-font').onchange = function (e) { draft.font = e.target.value; live(); };
-    $('lk-density').onchange = function (e) { draft.density = e.target.value; live(); };
-    $('lk-speed').onchange = function (e) { draft.speed = e.target.value; live(); };
-    $('lk-size').onchange = function (e) { draft.size = e.target.value; live(); };
-    $('lk-anim').onchange = function (e) { draft.anim = e.target.checked ? 1 : 0; live(); };
-    $('lk-lock').onchange = function (e) { draft.lock = e.target.checked ? 1 : 0; };
-    var et;
-    $('lk-emoji').oninput = function (e) { draft.emoji = e.target.value; clearTimeout(et); et = setTimeout(live, 350); };
-    $('lk-name').oninput = function (e) { draft.appName = e.target.value; live(); };
-    $('lk-tag').oninput = function (e) { draft.tagline = e.target.value; live(); };
-    $('lk-ann').oninput = function (e) { draft.announce = e.target.value; live(); };
 
-    $('lk-x').onclick = function () { closeLook(); render(site); };
-    modal.addEventListener('click', function (e) { if (e.target === modal) { closeLook(); render(site); } });
+    $('lp-anim').onchange = function (e) { draft.anim = e.target.checked ? 1 : 0; live(); };
+    $('lp-lock').onchange = function (e) { draft.lock = e.target.checked ? 1 : 0; };
+    $('lp-q').oninput = function (e) { if (EMO) showResults(e.target.value); };
+    $('lp-name').oninput = function (e) { draft.appName = e.target.value; live(); };
+    $('lp-tag').oninput = function (e) { draft.tagline = e.target.value; live(); };
+    $('lp-ann').oninput = function (e) { draft.announce = e.target.value; live(); };
 
-    function msg(t) { $('lk-msg').textContent = t; }
-    $('lk-save').onclick = function () {
+    $('lp-save').onclick = function () {
       msg('Save ho raha hai...');
       fetch('/api/admin/site-settings', {
         method: 'PUT',
@@ -338,11 +440,11 @@
           msg('Saved ✅ Sab ke app me 1 minute me aa jayega.');
           draft = null;
           render(site);
-          setTimeout(closeLook, 900);
+          setTimeout(closeLook, 1000);
         })
         .catch(function (e) { msg('Save nahi hua: ' + e.message); });
     };
-    $('lk-reset').onclick = function () {
+    $('lp-reset').onclick = function () {
       if (!confirm('Sab default kar du?')) return;
       fetch('/api/admin/site-settings', { method: 'DELETE' })
         .then(function (r) { return r.json(); })

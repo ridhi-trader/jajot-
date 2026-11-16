@@ -1,0 +1,54 @@
+/* Admin "App ka look" panel: 4 tabs, big tap targets */
+#look-modal .lp-card {
+  width: 100%; max-width: 520px; margin: 8px 0; display: flex; flex-direction: column; max-height: calc(100vh - 32px);
+  background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+  box-shadow: 0 16px 40px var(--glow); backdrop-filter: blur(10px); overflow: hidden;
+}
+#look-modal .lp-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 6px; font-size: 18px; }
+#look-modal .lp-head button { padding: 2px 10px; }
+#look-modal .lp-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 6px 12px; }
+#look-modal .lp-tabs button { display: flex; flex-direction: column; align-items: center; gap: 0; padding: 8px 4px; font-size: 20px; line-height: 1.2; border-radius: 16px; }
+#look-modal .lp-tabs button span { font-size: 12px; font-weight: 700; }
+#look-modal .lp-tabs button.on { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: var(--accent-text); border-color: transparent; }
+#look-modal .lp-body { flex: 1; overflow-y: auto; padding: 8px 16px 12px; }
+#look-modal .lp-help { color: var(--muted); font-size: 14px; margin: 4px 0 12px; }
+#look-modal .lp-h { font-weight: 700; margin: 16px 0 6px; }
+#look-modal .lp-h small { font-weight: 500; color: var(--muted); }
+#look-modal .lp-lbl { font-weight: 700; font-size: 13px; margin: 10px 0 4px; }
+
+#look-modal .lp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+#look-modal .lp-tile { display: flex; flex-direction: column; gap: 6px; padding: 8px; border-radius: 16px; text-align: center; }
+#look-modal .lp-sw { display: block; height: 44px; border-radius: 10px; border: 1px solid var(--line); }
+#look-modal .lp-nm { font-size: 13px; font-weight: 700; }
+#look-modal .lp-tile.on { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow); background: var(--card); }
+#look-modal .lp-tile.on .lp-nm::after { content: ' ✔'; color: var(--accent); }
+
+#look-modal .lp-fonts { display: grid; gap: 8px; }
+#look-modal .lp-font { display: flex; align-items: center; gap: 10px; padding: 10px 14px; text-align: left; border-radius: 16px; font-weight: 500; }
+#look-modal .lp-font b { font-size: 17px; min-width: 130px; }
+#look-modal .lp-font span { flex: 1; opacity: .75; font-size: 15px; }
+#look-modal .lp-font i { font-style: normal; color: var(--accent); visibility: hidden; font-size: 18px; }
+#look-modal .lp-font.on { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow); }
+#look-modal .lp-font.on i { visibility: visible; }
+
+#look-modal .lp-switch { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-weight: 700; font-size: 15px; cursor: pointer; }
+#look-modal .lp-switch input { width: 20px; height: 20px; margin: 0; flex: none; }
+#look-modal .lp-packs { display: flex; flex-wrap: wrap; gap: 6px; }
+#look-modal .lp-packs button { padding: 5px 12px; font-size: 14px; }
+#look-modal .lp-sel, #look-modal .lp-res { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-height: 40px; }
+#look-modal .lp-res { max-height: 190px; overflow-y: auto; padding: 4px 0; }
+#look-modal .lp-e { padding: 4px 8px; font-size: 24px; line-height: 1.2; border-radius: 12px; }
+#look-modal .lp-clear { padding: 4px 10px; font-size: 13px; }
+#look-modal input[type=search] { margin-bottom: 8px; }
+#look-modal .lp-seg { display: flex; gap: 6px; }
+#look-modal .lp-seg button { flex: 1; padding: 7px 4px; font-size: 14px; }
+#look-modal .lp-seg button.on { background: linear-gradient(90deg, var(--accent), var(--accent2)); color: var(--accent-text); border-color: transparent; }
+
+#look-modal .lp-foot { padding: 10px 16px 14px; border-top: 1px solid var(--line); background: var(--card); }
+#look-modal .lp-actions { display: flex; gap: 8px; margin-top: 6px; }
+#look-modal .lp-actions .primary { flex: 1; }
+#look-modal #lp-msg { min-height: 20px; margin-top: 6px; font-size: 14px; }
+@media (max-width: 480px) {
+  #look-modal .lp-grid { grid-template-columns: repeat(2, 1fr); }
+  #look-modal .lp-font b { min-width: 100px; }
+}
