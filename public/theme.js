@@ -257,7 +257,7 @@
     var l = document.createElement('link');
     l.id = 'look-css';
     l.rel = 'stylesheet';
-    l.href = '/look-panel.css?v=1';
+    l.href = '/look-panel.css?v=2';
     document.head.appendChild(l);
   }
 
@@ -271,7 +271,7 @@
     closeLook();
     loadPanelCss();
     draft = merge(DEF, site);
-    if (!THEMES[draft.theme]) { draft.theme = root.dataset.theme; draft.lock = 1; }
+    if (!THEMES[draft.theme]) { draft.theme = root.dataset.theme; }
 
     modal = document.createElement('div');
     modal.id = 'look-modal';
@@ -332,7 +332,7 @@
           '</div>' +
         '</div>' +
         '<div class="lp-foot">' +
-          '<label class="lp-switch"><input type="checkbox" id="lp-lock"><span>🔒 Clients theme na badal sakein</span></label>' +
+          '<label class="lp-switch"><input type="checkbox" id="lp-lock"><span>🔒 Lock: clients theme na badal sakein (band rakho = sab badal sakein)</span></label>' +
           '<div class="lp-actions"><button type="button" class="primary" id="lp-save">💾 Save karo</button><button type="button" id="lp-reset">Default</button></div>' +
           '<div id="lp-msg" class="muted"></div>' +
         '</div>' +
@@ -391,7 +391,7 @@
 
     modal.addEventListener('click', function (e) {
       var b;
-      if (e.target === modal || e.target.closest('#lp-x')) { closeLook(); render(site); return; }
+      if (e.target.closest('#lp-x')) { closeLook(); render(site); return; }
       if ((b = e.target.closest('[data-tab]'))) return showTab(b.dataset.tab);
       if ((b = e.target.closest('[data-lt]'))) { draft.theme = b.dataset.lt; return live(); }
       if ((b = e.target.closest('[data-lf]'))) { draft.font = b.dataset.lf; return live(); }
