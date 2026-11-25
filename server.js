@@ -317,6 +317,16 @@ app.post('/api/admin/users', auth, adminOnly, (req, res) => {
   res.json({ id: info.lastInsertRowid });
 });
 
+app.post('/api/admin/users/:id/password', auth, adminOnly, (req, res) => {
+  const { password } = req.body || {};
+  if (!password || password.length < 8) return res.status(400).json({ error: 'Password min 8 chars' });
+  const u = db.prepare('SELECT id, role FROM users WHERE id=?').get(req.params.id);
+  if (!u) return res.status(404).json({ error: 'User not found' });
+  if (u.role === 'admin') return res.status(400).json({ error: 'Use Change password for admin' });
+  db.prepare('UPDATE users SET password_hash=? WHERE id=?').run(bcrypt.hashSync(password, 10), u.id);
+  res.json({ ok: true });
+});
+
 app.use((err, req, res, next) => {
   res.status(400).json({ error: err.message || 'Error' });
 });

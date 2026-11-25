@@ -365,9 +365,25 @@
   // ---------- admin ----------
   async function loadAdmin() {
     const rows = await api('/api/admin/clients');
-    $('ad-list').innerHTML = `<div class="row"><input id="nu-name" placeholder="Name"><input id="nu-email" type="email" placeholder="Email"><input id="nu-pass" placeholder="Temporary password (min 8)"><button id="nu-add" class="primary">Add user</button></div><div id="nu-msg" class="muted"></div><table><tr><th>Name</th><th>Email</th><th>Role</th><th>Accounts</th><th>Posts</th></tr>${rows
-      .map((r) => `<tr><td>${esc(r.name)}</td><td>${esc(r.email)}</td><td>${esc(r.role)}</td><td>${r.accounts}</td><td>${r.posts}</td></tr>`)
+    $('ad-list').innerHTML = `<div class="row"><input id="nu-name" placeholder="Name"><input id="nu-email" type="email" placeholder="Email"><input id="nu-pass" placeholder="Temporary password (min 8)"><button id="nu-add" class="primary">Add user</button></div><div id="nu-msg" class="muted"></div><table><tr><th>Name</th><th>Email</th><th>Role</th><th>Accounts</th><th>Posts</th><th></th></tr>${rows
+      .map((r) => `<tr><td>${esc(r.name)}</td><td>${esc(r.email)}</td><td>${esc(r.role)}</td><td>${r.accounts}</td><td>${r.posts}</td><td>${r.role === 'admin' ? '' : `<button class="rp-btn" data-id="${r.id}" data-name="${esc(r.name || r.email)}">Reset password</button>`}</td></tr>`)
       .join('')}</table>`;
+    document.querySelectorAll('.rp-btn').forEach((b) => {
+      b.onclick = async () => {
+        const pw = prompt('New password for ' + b.dataset.name + ' (min 8 characters)');
+        if (!pw) return;
+        try {
+          await api('/api/admin/users/' + b.dataset.id + '/password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: pw }),
+          });
+          alert('Password set. User ko ye password bhejo, wo login ke baad Change password kare.');
+        } catch (e) {
+          alert(e.message);
+        }
+      };
+    });
     $('nu-add').onclick = async () => {
       const msg = $('nu-msg');
       msg.className = 'muted';
