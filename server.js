@@ -48,12 +48,12 @@ const upload = multer({
 
 // ---------- auth ----------
 function issueToken(res, user) {
-  const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '30d' });
+  const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '365d' });
   res.cookie('token', token, {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 30 * 24 * 3600 * 1000,
+    maxAge: 365 * 24 * 3600 * 1000,
   });
 }
 
@@ -63,6 +63,8 @@ function auth(req, res, next) {
     const user = db.prepare('SELECT id, email, name, role FROM users WHERE id=?').get(p.id);
     if (!user) throw new Error('no user');
     req.user = user;
+    // Rolling login: refresh cookie if older than 1 day, so active users never get logged out
+    if (p.iat && Date.now() / 1000 - p.iat > 86400) issueToken(res, user);
     next();
   } catch {
     res.status(401).json({ error: 'Login required' });
