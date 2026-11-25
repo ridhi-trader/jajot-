@@ -48,12 +48,12 @@ const upload = multer({
 
 // ---------- auth ----------
 function issueToken(res, user) {
-  const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+  const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '30d' });
   res.cookie('token', token, {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 7 * 24 * 3600 * 1000,
+    maxAge: 30 * 24 * 3600 * 1000,
   });
 }
 
@@ -324,6 +324,14 @@ app.post('/api/admin/users/:id/password', auth, adminOnly, (req, res) => {
   if (!u) return res.status(404).json({ error: 'User not found' });
   if (u.role === 'admin') return res.status(400).json({ error: 'Use Change password for admin' });
   db.prepare('UPDATE users SET password_hash=? WHERE id=?').run(bcrypt.hashSync(password, 10), u.id);
+  res.json({ ok: true });
+});
+
+app.delete('/api/admin/users/:id', auth, adminOnly, (req, res) => {
+  const u = db.prepare('SELECT id, role FROM users WHERE id=?').get(req.params.id);
+  if (!u) return res.status(404).json({ error: 'User not found' });
+  if (u.role === 'admin') return res.status(400).json({ error: 'Admin delete nahi ho sakta' });
+  db.prepare('DELETE FROM users WHERE id=?').run(u.id);
   res.json({ ok: true });
 });
 
