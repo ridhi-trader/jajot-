@@ -59,6 +59,14 @@
   var draft = null;     // unsaved admin edits (live preview)
   var isAdmin = false;
   var site = merge(DEF, readJSON('sh_site'));
+  var ME_KEYS = ['font', 'emoji', 'anim', 'density', 'speed', 'size'];
+  // Settings in effect: admin/locked => site settings; otherwise site + this user's own choices (kept on their device)
+  function S() {
+    if (isAdmin || site.lock) return site;
+    var m = readJSON('sh_me'), o = merge(site, {});
+    ME_KEYS.forEach(function (k) { if (m[k] !== undefined) o[k] = m[k]; });
+    return o;
+  }
 
   // ---------- helpers ----------
   function lsGet(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
@@ -171,7 +179,7 @@
       .then(function (j) {
         site = merge(DEF, j);
         lsSet('sh_site', JSON.stringify(site));
-        if (!draft) render(site);
+        if (!draft) render(S());
       })
       .catch(function () {});
   }
@@ -210,12 +218,11 @@
 
     btn.onclick = function () {
       (isAdmin ? Promise.resolve(true) : refreshAdmin()).then(function (a) {
-        if (a) { picker.classList.add('hidden'); openLook(); }
-        else picker.classList.toggle('hidden');
+        picker.classList.add('hidden'); openLook();
       });
     };
     picker.querySelectorAll('[data-t]').forEach(function (b) {
-      b.onclick = function () { lsSet('sh_pick', b.dataset.t); render(site); };
+      b.onclick = function () { lsSet('sh_pick', b.dataset.t); render(S()); };
     });
     picker.querySelector('#th-anim').onchange = function (e) {
       lsSet('sh_anim', e.target.checked ? '1' : '0');
@@ -270,7 +277,8 @@
   function openLook() {
     closeLook();
     loadPanelCss();
-    draft = merge(DEF, site);
+    draft = merge(DEF, S());
+    if (!isAdmin) draft.theme = userPick() || site.theme;
     if (!THEMES[draft.theme]) { draft.theme = root.dataset.theme; }
 
     modal = document.createElement('div');
@@ -346,6 +354,11 @@
     $('lp-anim').checked = !!draft.anim;
     $('lp-lock').checked = !!draft.lock;
 
+    if (!isAdmin) {
+      var tb = modal.querySelector('[data-tab="text"]'); if (tb) tb.style.display = 'none';
+      var lk = modal.querySelector('#lp-lock'); if (lk && lk.closest('label')) lk.closest('label').style.display = 'none';
+      var hb = modal.querySelector('.lp-head b'); if (hb) hb.textContent = '🎨 Mera look';
+    }
     function msg(t) { $('lp-msg').textContent = t; }
 
     function paintSel() {
@@ -391,7 +404,7 @@
 
     modal.addEventListener('click', function (e) {
       var b;
-      if (e.target.closest('#lp-x')) { closeLook(); render(site); return; }
+      if (e.target.closest('#lp-x')) { closeLook(); render(S()); return; }
       if ((b = e.target.closest('[data-tab]'))) return showTab(b.dataset.tab);
       if ((b = e.target.closest('[data-lt]'))) { draft.theme = b.dataset.lt; return live(); }
       if ((b = e.target.closest('[data-lf]'))) { draft.font = b.dataset.lf; return live(); }
@@ -426,6 +439,17 @@
     $('lp-ann').oninput = function (e) { draft.announce = e.target.value; live(); };
 
     $('lp-save').onclick = function () {
+      if (!isAdmin) {
+        var me = {};
+        ME_KEYS.forEach(function (k) { me[k] = draft[k]; });
+        lsSet('sh_me', JSON.stringify(me));
+        if (THEMES[draft.theme]) lsSet('sh_pick', draft.theme);
+        msg('Saved ✅ Ye sirf tere phone/laptop me lagega.');
+        draft = null;
+        render(S());
+        setTimeout(closeLook, 800);
+        return;
+      }
       msg('Save ho raha hai...');
       fetch('/api/admin/site-settings', {
         method: 'PUT',
@@ -439,13 +463,20 @@
           if (site.theme) lsSet('sh_pick', site.theme);
           msg('Saved ✅ Sab ke app me 1 minute me aa jayega.');
           draft = null;
-          render(site);
+          render(S());
           setTimeout(closeLook, 1000);
         })
         .catch(function (e) { msg('Save nahi hua: ' + e.message); });
     };
     $('lp-reset').onclick = function () {
       if (!confirm('Sab default kar du?')) return;
+      if (!isAdmin) {
+        try { localStorage.removeItem('sh_me'); localStorage.removeItem('sh_pick'); } catch (e) {}
+        draft = null;
+        closeLook();
+        render(S());
+        return;
+      }
       fetch('/api/admin/site-settings', { method: 'DELETE' })
         .then(function (r) { return r.json(); })
         .then(function (j) {
@@ -454,7 +485,7 @@
           try { localStorage.removeItem('sh_pick'); } catch (e) {}
           draft = null;
           closeLook();
-          render(site);
+          render(S());
         })
         .catch(function (e) { msg('Reset nahi hua: ' + e.message); });
     };
@@ -469,9 +500,9 @@
 
   // ---------- start ----------
   function init() {
-    render(site);
+    render(S());
     buildButton();
-    render(site);
+    render(S());
     load();
     refreshAdmin();
     setInterval(function () { if (!document.hidden) load(); }, 60000);
@@ -483,7 +514,7 @@
       }).observe(appEl, { attributes: true, attributeFilter: ['class'] });
     }
     var rt;
-    window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { buildLayer(draft || site, root.dataset.theme); }, 400); });
+    window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { buildLayer(draft || S(), root.dataset.theme); }, 400); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
